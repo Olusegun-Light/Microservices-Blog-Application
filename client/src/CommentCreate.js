@@ -7,7 +7,7 @@ const CommentCreate = ({ postId }) => {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    await axios.post(`http://localhost:4001/posts/${postId}/comments`, {
+    await axios.post(`http://posts.com/posts/${postId}/comments`, {
       content,
     });
 
@@ -25,7 +25,7 @@ const CommentCreate = ({ postId }) => {
             className="form-control"
           />
         </div>
-        <button className="btn btn-primary">Submit</button>
+        <button className="btn btn-primary">Submit.</button>
       </form>
     </div>
   );
