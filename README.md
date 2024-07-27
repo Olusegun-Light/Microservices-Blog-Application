@@ -1,17 +1,64 @@
 # Microservices Blog Application
 
-## Overview
+## Project Description
 
-This project is a microservices-based blog application built using React for the client-side and Express for the server-side. The application allows users to create posts and comments. Comments are moderated to check for specific content before being displayed.
+This project is a full-featured blog application built using a microservices architecture. The application enables users to create posts and comments, with a moderation system to filter inappropriate content. By breaking down the application into multiple services, it demonstrates how to create a scalable and maintainable system using modern development practices.
 
-## Architecture
+### Key Features
 
-The application is divided into several microservices:
-1. **Posts Service**: Manages post creation.
-2. **Comments Service**: Manages comment creation and moderation status.
-3. **Query Service**: Aggregates data from posts and comments for the client.
-4. **Moderation Service**: Checks comments for prohibited content.
-5. **Event Bus**: Manages the communication between all services by forwarding events.
+- **Post Creation**: Users can create new blog posts with a title.
+- **Commenting System**: Users can comment on posts, with each comment going through a moderation process.
+- **Moderation**: Comments are automatically reviewed and flagged if they contain specific prohibited content.
+- **Real-Time Updates**: The application updates in real-time, reflecting the current state of posts and comments.
+
+### Technology Stack
+
+- **Frontend**: Built with React, the user interface provides a seamless experience for creating posts and comments.
+- **Backend**: Consists of multiple Node.js services using Express to handle different aspects of the application.
+- **Event Bus**: Facilitates communication between services by broadcasting events, ensuring that all services stay in sync.
+- **Data Storage**: Each service uses in-memory storage for simplicity, though it can be extended to use persistent storage solutions.
+
+
+### Microservices Overview
+
+1. **Posts Service**
+   - Manages the creation and retrieval of posts.
+   - Emits events to notify other services when a new post is created.
+
+2. **Comments Service**
+   - Handles the creation of comments for specific posts.
+   - Emits events when new comments are created and when their status changes after moderation.
+
+3. **Query Service**
+   - Aggregates data from the Posts and Comments services to provide a unified view for the client.
+   - Listens for events to maintain up-to-date data.
+
+4. **Moderation Service**
+   - Automatically reviews new comments for inappropriate content.
+   - Changes the status of comments based on the moderation rules and emits events to update other services.
+
+5. **Event Bus**
+   - Centralized event management service that ensures all other services are kept up-to-date by broadcasting events they need to process.
+
+### Kubernetes Configuration
+
+The application is containerized and deployed using Kubernetes. The configuration files for the deployments and services are located in the `infra/k8s` directory. Here’s an overview of the configuration files:
+
+- **Client Deployment and Service**: Defines the deployment and service for the frontend client application.
+- **Comments Deployment and Service**: Defines the deployment and service for the comments service.
+- **Event Bus Deployment and Service**: Defines the deployment and service for the event bus service.
+- **Ingress Service**: Configures the NGINX ingress controller to route traffic to the appropriate services based on the URL path.
+- **Moderation Deployment and Service**: Defines the deployment and service for the moderation service.
+- **Posts Deployment and Service**: Defines the deployment and service for the posts service.
+- **Query Deployment and Service**: Defines the deployment and service for the query service.
+
+### Skaffold Configuration
+
+The `skaffold.yaml` file orchestrates the building and deployment of the application using Skaffold. It includes:
+
+- **Build Configuration**: Specifies how to build the Docker images for each service.
+- **Deploy Configuration**: Specifies the Kubernetes manifests to be used for deploying the application.
+
 
 ## Services and Code Details
 
@@ -92,46 +139,10 @@ The client is built using React and includes several key components:
 
 ### Running the Services
 
-1. Start the posts service:
-    ```bash
-    cd posts
-    npm start
-    ```
+  ```bash
+    skaffold dev
+  ```
 
-2. Start the comments service:
-    ```bash
-    cd comments
-    npm start
+### Conclusion
 
-    ```
-
-3. Start the query service:
-    ```bash
-    cd event-bus/query
-    npm start
-
-    ```
-
-4. Start the moderation service:
-    ```bash
-    cd moderation
-    npm start
-
-    ```
-
-5. Start the event bus:
-    ```bash
-    cd event-bus
-    npm start
-    ```
-
-### Running the Client
-
-1. Start the React client:
-    ```bash
-    cd client
-    npm start
-    ```
-
-2. Open your browser and navigate to `http://localhost:3000`.
-
+This project serves as an example of building a microservices-based application using modern technologies and Kubernetes for orchestration. It provides a scalable and maintainable solution for a simple blog application, illustrating the benefits of a microservices architecture.
